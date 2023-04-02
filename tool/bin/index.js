@@ -1,3 +1,11 @@
 #!/usr/bin/env node
 
-console.log('hello tool');
+const arg = require('arg');
+
+const args = arg({
+  '--start': Boolean,
+  '--build': Boolean,
+  '--test': Boolean,
+})
+
+console.log(args);
