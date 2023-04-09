@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import arg from 'arg'
 import chalk from 'chalk';
-import { readPackageUp } from 'read-pkg-up';
+import { start } from "../src/commands/start.js";
+import { getConfig } from "../src/config/config-mgr.js";
 
 try {
   const args = arg({
@@ -9,21 +10,9 @@ try {
     '--build': Boolean,
     '--test': String,
   })
-  const argsMessage = {
-    '--start': 'starting the app',
-    '--build': 'building the app',
-    '--test': `${args['--test']}testing the app'`,
-  }
   if (args['--start']) {
-    const { packageJson: { tool } } = await readPackageUp();
-    if (tool) {
-      console.log('Found configuration', tool);
-      // TODO: do something with configuration
-    } else {
-      console.log(chalk.yellow('Could not find configuration, using default'));
-      // TODO: get default configuration
-    }
-    console.log(chalk.bgCyanBright(argsMessage['--start']));
+    const config = await getConfig();
+    start(config)
   }
 } catch (error) {
   console.log(chalk.yellow(error.message));
