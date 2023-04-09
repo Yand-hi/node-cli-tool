@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import arg from 'arg'
 import chalk from 'chalk';
-import { start } from "../src/commands/start.js";
-import { getConfig } from "../src/config/config-mgr.js";
+import start from "../src/commands/start.js";
+import getConfig from "../src/config/config-mgr.js";
 
 try {
   const args = arg({
@@ -11,7 +11,7 @@ try {
     '--test': String,
   })
   if (args['--start']) {
-    const config = await getConfig();
+    const config = getConfig();
     start(config)
   }
 } catch (error) {

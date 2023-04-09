@@ -1,14 +1,18 @@
 import chalk from "chalk";
-import { readPackageUp } from 'read-pkg-up';
+import { cosmiconfigSync  } from "cosmiconfig";
 
-export async function getConfig() {
-  const { packageJson: { tool } } = await readPackageUp();
+const configLoader = cosmiconfigSync('tool');
 
-  if (tool) {
-    console.log('Found configuration', tool);
-    return tool;
-  } else {
+function getConfig() {
+  const result = configLoader.search(process.cwd());
+  console.log(result);
+  if (!result) {
     console.log(chalk.yellow('Could not find configuration, using default'));
     return { port: 1234 };
+  } else {
+    console.log('Found configuration', result.config);
+    return result.config;
   }
 }
+
+export default getConfig
