@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import arg from 'arg'
 import chalk from 'chalk';
-import start from "../src/commands/start.js";
-import getConfig from "../src/config/config-mgr.js";
+import { start } from "../src/commands/start.js";
+import { getConfig } from "../src/config/config-mgr.js";
 
 try {
   const args = arg({
@@ -15,7 +15,8 @@ try {
     start(config)
   }
 } catch (error) {
-  console.log(chalk.yellow(error.message));
+  console.log(error);
+  console.log(chalk.red(error.message));
   console.log()
   usage()
 }

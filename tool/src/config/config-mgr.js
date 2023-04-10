@@ -1,11 +1,10 @@
 import chalk from "chalk";
-import { cosmiconfigSync  } from "cosmiconfig";
+import { cosmiconfigSync } from "cosmiconfig";
 
 const configLoader = cosmiconfigSync('tool');
 
-function getConfig() {
+export function getConfig() {
   const result = configLoader.search(process.cwd());
-  console.log(result);
   if (!result) {
     console.log(chalk.yellow('Could not find configuration, using default'));
     return { port: 1234 };
@@ -14,5 +13,3 @@ function getConfig() {
     return result.config;
   }
 }
-
-export default getConfig

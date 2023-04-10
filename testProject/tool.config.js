@@ -1,3 +1,3 @@
-export default {
-  tool: 8888
+module.exports = {
+  port: 6666
 }
