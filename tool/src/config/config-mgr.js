@@ -1,7 +1,16 @@
+import Ajv from "ajv";
 import chalk from "chalk";
+import { readFile } from 'fs/promises'
 import { cosmiconfigSync } from "cosmiconfig";
 
+const ajv = new Ajv();
 const configLoader = cosmiconfigSync('tool');
+
+const schema = JSON.parse(
+  await readFile(
+    new URL('./schema.json', import.meta.url)
+  )
+)
 
 export function getConfig() {
   const result = configLoader.search(process.cwd());
@@ -9,7 +18,16 @@ export function getConfig() {
     console.log(chalk.yellow('Could not find configuration, using default'));
     return { port: 1234 };
   } else {
-    console.log('Found configuration', result.config);
-    return result.config;
+    const validate = ajv.compile(schema);
+    const valid = validate(result.config);
+    if (!valid) {
+      console.log(chalk.yellow('Invalid configuration was supplied'));
+      console.log(validate.errors);
+      process.exit(1);
+    }
+    else {
+      console.log('Found configuration', result.config);
+      return result.config;
+    }
   }
 }
